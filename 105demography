@@ -65,13 +65,15 @@ def calculate_b(pays):
     den = ((2017 - 1960 + 1) * somme_x_carre(pays)) - (somme_x(pays) ** 2)
     res = a / den
     return res
-
+def calculate_a_inverse(pays):
+    a = (((2017 - 1960 + 1) * len(pays))* somme_xy(pays)) - (somme_y(pays) * somme_x(pays))
+    den = (((2017 - 1960 + 1) * len(pays))* somme_y_carre(pays)) - (somme_y(pays)**2)
+    res = a / den
+    return res
 
 def calculate_b_inverse(pays):
-    a = somme_x(pays) * somme_y_carre(pays) - somme_y(pays) * somme_xy(pays)
-    den = (((2017 - 1960 + 1) * len(pays)) * somme_y_carre(pays)) - (somme_y(pays) ** 2)
-    print(((2017 - 1960 + 1) * len(pays)) * somme_y_carre(pays))
-    print((somme_y(pays) ** 2))
+    a = (somme_x(pays)*somme_y_carre(pays)) - (somme_y(pays) * somme_xy(pays))
+    den = (((2017 - 1960 + 1) * len(pays)) * somme_y_carre(pays)) - (somme_y(pays)**2)
     res = a / den
     return res
 
@@ -126,10 +128,9 @@ def main(argv):
     print("    Root-mean-square deviation: " + "{:.2f}".format(root / 1000000))
     print("    Population in 2050: " + "{:.2f}\nFit2".format((a * 2050 + b) / 1000000))
 
-    inverse_a = 0
+    inverse_a = calculate_a_inverse(pays)
     inverse_b = calculate_b_inverse(pays)
-    print(inverse_b)
-    print("    Y = " + "{:.2f}".format(inverse_a) + " X + " + "{:.2f}".format(inverse_b))
+    print("    Y = " + "{:.2f}".format(inverse_a * 1000000) + " X + " + "{:.2f}".format(inverse_b))
     root = 0
     print("    Root-mean-square deviation: " + "{:.2f}".format(root / 1000000))
     print("    Population in 2050: " + "{:.2f}".format(inverse_a * 2050 + inverse_b))
