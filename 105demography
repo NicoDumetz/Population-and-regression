@@ -35,6 +35,13 @@ def somme_x_carre(pays):
     total_sum_of_squares = sum(year**2 for year in years)
     return total_sum_of_squares
 
+def somme_y_carre(pays):
+    comp = 0
+    for i in range(len(pays)):
+        for j in range(2, 60):
+            comp += int(pays[i][j])**2
+    return comp
+
 def somme_y(pays):
     comp = 0
     for i in range(len(pays)):
@@ -43,7 +50,7 @@ def somme_y(pays):
     return comp
 
 def calculate_a(pays):
-    a = ((2017 - 1960 + 1) * somme_xy(pays)) - (somme_x(pays) * somme_y(pays))
+    a = ((2017 - 1960 + 1) * somme_xy(pays)) - (somme_y(pays) * somme_x(pays))
     den = ((2017 - 1960 + 1) * somme_x_carre(pays)) - (somme_x(pays)**2)
     res = a / den
     return res
@@ -99,6 +106,15 @@ def main(argv):
     root = root_mean_square(pays, a, b)
     print("    Root-mean-square deviation: "+"{:.2f}".format(root / 1000000))
     print("    Population in 2050: "+"{:.2f}\nFit2".format((a * 2050 + b) / 1000000))
+
+
+
+    inverse_a = 0
+    inverse_b = 0
+    print("    Y = "+"{:.2f}".format(inverse_a) + " X + " + "{:.2f}".format(inverse_b))
+    root = root_mean_square(pays, inverse_a, inverse_b)
+    print("    Root-mean-square deviation: "+"{:.2f}".format(root / 1000000))
+    print("    Population in 2050: "+"{:.2f}".format(inverse_a * 2050 + inverse_b))
     return 0
 
 if __name__ == "__main__":
