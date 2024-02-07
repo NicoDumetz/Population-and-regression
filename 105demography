@@ -68,22 +68,24 @@ class Demo:
             self.word.append(self.data[i][0])
 
     def check_pays(self):
-        print("Country: ", sep ="", end="")
         j = 0
         i =0
         self.index = []
+        self.name = []
         while i < len(self.ini) and j < len(self.arg):
-            if self.arg[j] == self.ini[i] and j == len(self.arg) -1:
-                print(self.word[i])
-                self.index.append(i)
-                j += 1
-                i = 0
-            elif self.arg[j] == self.ini[i]:
-                print(self.word[i], " ", sep=',' , end ="")
+            if self.arg[j] == self.ini[i]:
+                self.name.append(self.word[i])
                 self.index.append(i)
                 j += 1
                 i = 0
             i += 1
+        if (len(self.name) != len(self.arg)):
+            exit(84)
+        self.name.sort()
+        print("Country: ", sep ="", end="")
+        for i in range(len(self.name) - 1):
+            print(self.name[i], end=' ')
+        print(self.name[len(self.name) - 1])
         self.index.sort()
 
     def load_pays(self):
