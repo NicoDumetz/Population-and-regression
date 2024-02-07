@@ -61,6 +61,14 @@ def calculate_b(pays):
     res = a / den
     return res
 
+def calculate_b_inverse(pays):
+    a = somme_x(pays)*somme_y_carre(pays) - somme_y(pays)*somme_xy(pays)
+    den = (((2017 - 1960 + 1) *len(pays))* somme_y_carre(pays)) - (somme_y(pays)**2)
+    print(((2017 - 1960 + 1) *len(pays))* somme_y_carre(pays))
+    print((somme_y(pays)**2))
+    res = a / den
+    return res
+
 def root_mean_square(pays, a, b):
     comp = 0
     anne = 1960
@@ -110,9 +118,10 @@ def main(argv):
 
 
     inverse_a = 0
-    inverse_b = 0
+    inverse_b = calculate_b_inverse(pays)
+    print(inverse_b)
     print("    Y = "+"{:.2f}".format(inverse_a) + " X + " + "{:.2f}".format(inverse_b))
-    root = root_mean_square(pays, inverse_a, inverse_b)
+    root = 0
     print("    Root-mean-square deviation: "+"{:.2f}".format(root / 1000000))
     print("    Population in 2050: "+"{:.2f}".format(inverse_a * 2050 + inverse_b))
     return 0
