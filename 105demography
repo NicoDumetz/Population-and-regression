@@ -135,7 +135,7 @@ class Demo:
     def root_mean_inv(self):
         self.inv_root = 0
         for i in range(0, len(self.tot_pays)):
-            func = self.all_years[i] * self.inv_b + self.inv_a
+            func = (self.all_years[i] - self.inv_a) / self.inv_b
             self.inv_root += ((func - self.tot_pays[i]) ** 2 / len(self.tot_pays))
 
     def correlation(self):
