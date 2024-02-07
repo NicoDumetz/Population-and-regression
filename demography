@@ -26,6 +26,10 @@ class Demo:
         self.get_value()
         self.get_a_b()
         self.root_mean()
+        self.get_value_inv()
+        self.get_a_b_inv()
+        self.root_mean_inv()
+        self.correlation()
         self.disp()
 
     def read_file(self):
@@ -42,6 +46,14 @@ class Demo:
             print("\tY = ", format(self.b/1000000, ".2f"), " X - ", format(self.a/1000000 * -1, ".2f"), sep="")
         print("\tRoot-mean-square deviation: ", format(sqrt(self.root)/1000000, ".2f"), sep="")
         print("\tPopulation in 2050: ", format((2050 * self.b + self.a)/1000000, ".2f"), sep="")
+        print("Fit 2")
+        if self.inv_a >= 0:
+            print("\tX = ", format(self.inv_b * 1000000, ".2f"), " Y + ", format(self.inv_a, ".2f"), sep="")
+        else:
+            print("\tX = ", format(self.inv_b * 1000000, ".2f"), " Y - ", format(self.inv_a * -1, ".2f"), sep="")
+        print("\tRoot-mean-square deviation: ", format(sqrt(self.inv_root)/1000000, ".2f"), sep="")
+        print("\tPopulation in 2050: ", format(((2050 - self.inv_a) / self.inv_b/1000000), ".2f"), sep="")
+        print("Correlation: ",format(self.cor, ".4f"), sep="")
 
     def manage_ini(self):
         self.ini = []
@@ -94,6 +106,10 @@ class Demo:
         self.a = (self.somme[0] * self.somme[2] - self.somme[1] * self.somme[3]) / (len(self.all_years) * self.somme[2] - self.somme[1] ** 2)
         self.b = ((len(self.all_years) * self.somme[3]) - (self.somme[0] * self.somme[1])) / ((len(self.all_years) * self.somme[2]) - self.somme[1]**2)
 
+    def get_a_b_inv(self):
+        self.inv_a = (self.somme[0] * self.somme[2] - self.somme[1] * self.somme[3]) / (len(self.all_years) * self.somme[2] - self.somme[1] ** 2)
+        self.inv_b = ((len(self.all_years) * self.somme[3]) - (self.somme[0] * self.somme[1])) / ((len(self.all_years) * self.somme[2]) - self.somme[1]**2)
+
     def get_value(self):
         self.somme = [0] * 4
         for i in range(0, len(self.tot_pays)):
@@ -101,11 +117,37 @@ class Demo:
             self.somme[1] += self.all_years[i]
             self.somme[2] += self.all_years[i]**2
             self.somme[3] += self.tot_pays[i] * self.all_years[i]
+
+    def get_value_inv(self):
+        self.somme = [0] * 4
+        for i in range(0, len(self.tot_pays)):
+            self.somme[0] += self.all_years[i]
+            self.somme[1] += self.tot_pays[i]
+            self.somme[2] += self.tot_pays[i]**2
+            self.somme[3] += self.tot_pays[i] * self.all_years[i]
+
     def root_mean(self):
         self.root = 0
         for i in range(0, len(self.tot_pays)):
             func = self.all_years[i] * self.b + self.a
             self.root += ((func - self.tot_pays[i]) ** 2 / len(self.tot_pays))
+
+    def root_mean_inv(self):
+        self.inv_root = 0
+        for i in range(0, len(self.tot_pays)):
+            func = self.all_years[i] * self.inv_b + self.inv_a
+            self.inv_root += ((func - self.tot_pays[i]) ** 2 / len(self.tot_pays))
+
+    def correlation(self):
+        predictions = [self.b * year + self.a for year in self.all_years]
+        mean_obt = sum(self.tot_pays) / len(self.tot_pays)
+        mean_pre = sum(predictions) / len(predictions)
+        num = sum((observed - mean_obt) * (predicted - mean_pre) for observed, predicted in zip(self.tot_pays, predictions))
+        deno_obs = sum((observed - mean_obt) ** 2 for observed in self.tot_pays)
+        deno_pre = sum((predicted - mean_pre) ** 2 for predicted in predictions)
+        self.cor = num / (sqrt(deno_obs) * sqrt(deno_pre))
+
+
 
 if __name__ == "__main__":
     pays = []
