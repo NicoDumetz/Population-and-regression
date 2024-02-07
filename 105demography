@@ -24,7 +24,6 @@ def somme_xy(pays):
             anne += 1
     return comp
 
-
 def somme_x(pays):
     years = list(range(1960, 2018))
     total_sum = sum(years)
@@ -40,8 +39,10 @@ def somme_x_carre(pays):
 def somme_y_carre(pays):
     comp = 0
     for i in range(len(pays)):
+        res = 0
         for j in range(2, 60):
-            comp += int(pays[i][j]) ** 2
+            res += int(pays[i][j])**2
+        comp += res
     return comp
 
 
@@ -59,22 +60,27 @@ def calculate_a(pays):
     res = a / den
     return res
 
-
 def calculate_b(pays):
     a = somme_y(pays) * somme_x_carre(pays) - somme_x(pays) * somme_xy(pays)
     den = ((2017 - 1960 + 1) * somme_x_carre(pays)) - (somme_x(pays) ** 2)
     res = a / den
     return res
+
+
 def calculate_a_inverse(pays):
-    a = (((2017 - 1960 + 1) * len(pays))* somme_xy(pays)) - (somme_y(pays) * somme_x(pays))
-    den = (((2017 - 1960 + 1) * len(pays))* somme_y_carre(pays)) - (somme_y(pays)**2)
+    a = (((2017 - 1960 + 1))* somme_xy(pays)) - (somme_y(pays) * somme_x(pays))
+    den = (((2017 - 1960 + 1))* somme_y_carre(pays)) - (somme_y(pays)**2)
     res = a / den
     return res
 
 def calculate_b_inverse(pays):
-    a = (somme_x(pays)*somme_y_carre(pays)) - (somme_y(pays) * somme_xy(pays))
-    den = (((2017 - 1960 + 1) * len(pays)) * somme_y_carre(pays)) - (somme_y(pays)**2)
+    a = ((somme_x(pays)*len(pays)) *somme_y_carre(pays)) - (somme_y(pays) * somme_xy(pays))
+    den = (((2017 - 1960 + 1)) * somme_y_carre(pays)) - (somme_y(pays)**2)
     res = a / den
+    print(somme_x(pays) *somme_y_carre(pays))
+    print( (somme_y(pays) * somme_xy(pays)))
+    print(((somme_x(pays)*len(pays))*somme_y_carre(pays)) - (somme_y(pays) * somme_xy(pays)))
+    print((((2017 - 1960 + 1)) * somme_y_carre(pays)) - (somme_y(pays)**2))
     return res
 
 
@@ -127,9 +133,10 @@ def main(argv):
     root = root_mean_square(pays, a, b)
     print("    Root-mean-square deviation: " + "{:.2f}".format(root / 1000000))
     print("    Population in 2050: " + "{:.2f}\nFit2".format((a * 2050 + b) / 1000000))
-
     inverse_a = calculate_a_inverse(pays)
     inverse_b = calculate_b_inverse(pays)
+    #print(inverse_a)
+    #print(inverse_b)
     print("    Y = " + "{:.2f}".format(inverse_a * 1000000) + " X + " + "{:.2f}".format(inverse_b))
     root = 0
     print("    Root-mean-square deviation: " + "{:.2f}".format(root / 1000000))
