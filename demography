@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2024
+## 105 demo
+## File description:
+## 105 demo
+##
+import sys
+from math import *
+import csv
+
+class Demo:
+    def __init__(self, filename, pays):
+        self.filename = filename
+        self.all_pays = pays
+        self.data = []
+        self.all_years = list(range(1960, 2018))
+        self.read_file()
+
+    def run(self):
+        self.manage_ini()
+        self.manage_word_pays()
+        self.check_pays()
+        self.load_pays()
+        self.total_pays()
+        self.fit1()
+
+    def read_file(self):
+        with open(self.filename, "r") as fichier_csv:
+            self.lecteur_csv = csv.reader(fichier_csv, delimiter=";")
+            for ligne in self.lecteur_csv:
+                self.data.append(ligne)
+
+    def manage_ini(self):
+        self.ini = []
+        i = 0
+        for i in range(len(self.data)):
+            self.ini.append(self.data[i][1])
+
+    def manage_word_pays(self):
+        self.word = []
+        i = 0
+        for i in range(len(self.data)):
+            self.word.append(self.data[i][0])
+
+    def check_pays(self): #a recheck
+        print("Country: ", sep ="", end="")
+        j = 0
+        self.index = []
+        for i in range(len(self.ini)):
+            try:
+                self.all_pays[j]
+            except:
+                break
+            if self.all_pays[j] == self.ini[i] and j == len(self.all_pays) -1:
+                print(self.word[i])
+                self.index.append(i)
+                j += 1
+                i = 0
+            elif self.all_pays[j] == self.ini[i]:
+                print(self.word[i], " ", sep=',' , end ="")
+                self.index.append(i)
+                j += 1
+                i = 0
+        self.index.sort()
+
+    def load_pays(self):
+        self.pays = []
+        j = 0
+        for i in range(len(self.all_pays)):
+            try:
+                self.index[j]
+            except:
+                break
+            if i == self.index[j]:
+                self.pays.append(self.all_pays[i])
+                j+=1
+
+    def total_pays(self):
+        self.tot_pays = [0] * 58
+        for i in range(0, len(self.pays)):
+            for j in range(2, len(self.pays)):
+                self.tot_pays[2 + j] += int(self.pays[i][j])
+
+
+if __name__ == "__main__":
+    pays = []
+    for i in range(1,len(sys.argv)):
+        pays.append(sys.argv[i])
+    if len(pays) < 1:
+        exit(84)
+    demography = Demo("./105demography_data.csv", pays)
+    demography.run()
+    sys.exit(0)
